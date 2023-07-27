@@ -15,7 +15,6 @@ class PID:
         self.K_i = K_i
         self.K_d = K_d
         self.integral_limit = integral_limit
-        self.integral_error = 0
 
         self.reset()
 
@@ -63,9 +62,15 @@ class PID:
         """
 
         # TODO: Calculate and return the integral term
-        self.integral_error += error * dt
+        self.integral += error * dt
 
-        return self.integral_error
+        # Apply integral limit if set
+        if self.integral_limit is not None:
+            self.integral = np.clip(
+                self.integral, -self.integral_limit, self.integral_limit
+            )
+
+        return self.integral
 
     def _get_derivative(self, error, dt):
         """Calculate the derivative term
@@ -77,6 +82,6 @@ class PID:
         """
 
         # TODO: Calculate and return the derivative term
-        err_rate = (self.last_error - error) / dt
+        derivative = (error - self.last_error) / dt
 
-        return err_rate
+        return derivative
