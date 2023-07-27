@@ -76,7 +76,7 @@ def main():
     desired_heading_deg = float(input("Enter target heading: "))
 
     # TODO: convert heading to radians
-    desired_heading = None
+    desired_heading = desired_heading_deg * (np.pi / 180)
 
     pid = PID(0.5, 0.0, 10.0, 100)
 
